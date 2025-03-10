@@ -1,39 +1,50 @@
-import { DecoderText } from '~/components/decoder-text';
-import { Heading } from '~/components/heading';
-import { Section } from '~/components/section';
-import { useTheme } from '~/components/theme-provider';
-import { tokens } from '~/components/theme-provider/theme';
-import { Transition } from '~/components/transition';
-import { VisuallyHidden } from '~/components/visually-hidden';
-import { Link as RouterLink } from '@remix-run/react';
-import { useInterval, usePrevious, useScrollToHash } from '~/hooks';
-import { Suspense, lazy, useEffect, useState } from 'react';
-import { cssProps } from '~/utils/style';
-import config from '~/config.json';
-import { useHydrated } from '~/hooks/useHydrated';
-import styles from './intro.module.css';
-import Social from './social';
+import { DecoderText } from "~/components/decoder-text";
+import { Heading } from "~/components/heading";
+import { Section } from "~/components/section";
+import { useTheme } from "~/components/theme-provider";
+import { tokens } from "~/components/theme-provider/theme";
+import { Transition } from "~/components/transition";
+import { VisuallyHidden } from "~/components/visually-hidden";
+import { Link as RouterLink } from "@remix-run/react";
+import { useInterval, usePrevious, useScrollToHash } from "~/hooks";
+import { Suspense, lazy, useEffect, useState } from "react";
+import { cssProps } from "~/utils/style";
+import config from "~/config.json";
+import { useHydrated } from "~/hooks/useHydrated";
+import styles from "./intro.module.css";
+import Social from "./social";
 
-import reactIcon from '~/assets/tech-stack/react.png';
-import reactNativeIcon from '~/assets/tech-stack/react-native.svg';
-import typescriptIcon from '~/assets/tech-stack/typescript.png';
-import javaScriptIcon from '~/assets/tech-stack/javascript.png';
-import kubernetesIcon from '~/assets/tech-stack/kubernetes.png';
-import awsIcon from '~/assets/tech-stack/aws.png';
+import reactIcon from "~/assets/tech-stack/react.png";
+import reactNativeIcon from "~/assets/tech-stack/react-native.svg";
+import typescriptIcon from "~/assets/tech-stack/typescript.png";
+import javaScriptIcon from "~/assets/tech-stack/javascript.png";
+import kubernetesIcon from "~/assets/tech-stack/kubernetes.png";
+import awsIcon from "~/assets/tech-stack/aws.png";
 
 const DisplacementSphere = lazy(() =>
-  import('./displacement-sphere').then(module => ({ default: module.DisplacementSphere }))
+  import("./displacement-sphere").then((module) => ({
+    default: module.DisplacementSphere,
+  }))
 );
 
 export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const { theme } = useTheme();
   const { disciplines } = config;
   const [disciplineIndex, setDisciplineIndex] = useState(0);
   const prevTheme = usePrevious(theme);
-  const introLabel = [disciplines.slice(0, -1).join(', '), disciplines.slice(-1)[0]].join(
-    ', and '
+  const introLabel = [
+    disciplines.slice(0, -1).join(", "),
+    disciplines.slice(-1)[0],
+  ].join(", and ");
+  const currentDiscipline = disciplines.find(
+    (item, index) => index === disciplineIndex
   );
-  const currentDiscipline = disciplines.find((item, index) => index === disciplineIndex);
   const titleId = `${id}-title`;
   const scrollToHash = useScrollToHash();
   const isHydrated = useHydrated();
@@ -53,7 +64,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
     }
   }, [theme, prevTheme]);
 
-  const handleScrollClick = event => {
+  const handleScrollClick = (event) => {
     event.preventDefault();
     scrollToHash(event.currentTarget.href);
   };
@@ -71,10 +82,14 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
       <Transition in key={theme} timeout={3000}>
         {({ visible, status }) => (
           <>
-            {isHydrated && (
-              <Suspense>
-                <DisplacementSphere />
-              </Suspense>
+            {isHydrated && mounted && (
+              <div className={styles.displacementContainer}>
+                <Suspense
+                  fallback={<div className={styles.displacementFallback} />}
+                >
+                  <DisplacementSphere />
+                </Suspense>
+              </div>
             )}
             <header className={styles.text}>
               <h1 className={styles.name} data-visible={visible} id={titleId}>
@@ -95,7 +110,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
                   <span className={styles.line} data-status={status} />
                 </span>
                 <div className={styles.row}>
-                  {disciplines.map(item => (
+                  {disciplines.map((item) => (
                     <Transition
                       unmount
                       in={item === currentDiscipline}

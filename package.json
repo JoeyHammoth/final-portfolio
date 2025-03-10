@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "homepage": "https://joeyhammoth.github.io/final-portfolio/",
+  "homepage": "https://hamishw.com",
   "description": "Portfolio site for Hamish Williams",
   "repository": "https://github.com/HamishMW/portfolio.git",
   "author": "Hamish Williams",
@@ -12,8 +12,7 @@
     "preview": "vite preview --port 8080",
     "start": "wrangler pages dev ./build/client",
     "postinstall": "node ./scripts/draco.cjs",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "npm run build && wrangler pages deploy ./build/client --project-name",
     "dev:storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
     "deploy:storybook": "wrangler pages deploy ./storybook-static --project-name portfolio-storybook --branch main"
@@ -59,7 +58,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.8.0",
-    "gh-pages": "^6.3.0",
+    "gh-pages": "^6.1.1",
     "node-fetch": "^3.3.2",
     "postcss": "^8.4.39",
     "postcss-custom-media": "^10.0.2",
@@ -73,6 +72,6 @@
     "wrangler": "^3.24.0"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=19.9.0"
   }
 }
