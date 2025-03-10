@@ -15,6 +15,7 @@ const isStorybook = process.argv[1]?.includes('storybook');
 
 export default defineConfig({
   assetsInclude: ['**/*.glb', '**/*.hdr', '**/*.glsl'],
+  base: "/final-portfolio",
   build: {
     assetsInlineLimit: 1024,
   },
